@@ -1,0 +1,31 @@
+name: Deploy New Relic Agent to Azure VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy New Relic Agent to Azure VM
+        run: |
+          # Install the New Relic agent on your Azure VM
+          # Replace <your_license_key> with your New Relic license key
+          # Replace <your_vm_ip> with the IP address of your Azure VM
+
+          ssh azureuser@<your_vm_ip> 'bash -s' < scripts/install_newrelic.sh <your_license_key>
+        shell: bash
+        env:
+          AZUREVM_SSH_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
+        # Make sure you have an SSH key configured for your VM and stored as a secret in GitHub
